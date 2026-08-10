@@ -8,12 +8,12 @@ stdenvNoCC.mkDerivation {
         owner = "vinceliuice";
         repo = "MacTahoe-icon-theme";
         rev = "1d8b6b966f156e5db214785a8e9598aed9952428";
-        hash = "";
+        hash = "sha256-OtOGj33VxW5bT18iieKTDeHwqsoLgUG/Xno3LICZtZc=";
     };
 
     dontConfigure = true;
     dontBuild = true;
-    # Disable fixup phase otherwise it will process all 30k svg files lmao.
+    # Disable fixup phase otherwise it will process all 30k svg files.
     dontFixup = true;
 
     patchPhase = ''
