@@ -2,18 +2,17 @@
 
 stdenvNoCC.mkDerivation {
     pname = "mac-tahoe-cursors";
-    version = "unstable-2026-08-10";
+    version = "unstable-2026-08-11";
 
     src = fetchFromGitHub {
         owner = "vinceliuice";
         repo = "MacTahoe-icon-theme";
-        rev = "1d8b6b966f156e5db214785a8e9598aed9952428";
-        hash = "sha256-OtOGj33VxW5bT18iieKTDeHwqsoLgUG/Xno3LICZtZc=";
+        rev = "db9a4f8b236d3c559326f041d75d5173de118c45";
+        hash = "sha256-4zYbSR7aKjyFRYEP6UL/76WJrnzoP+T/JMVBXOcN1vI=";
     };
 
     dontConfigure = true;
     dontBuild = true;
-    # Disable fixup phase otherwise it will process all 30k svg files.
     dontFixup = true;
 
     patchPhase = ''
@@ -30,6 +29,7 @@ stdenvNoCC.mkDerivation {
     installPhase = ''
         runHook preInstall
 
+        cd cursors
         install -d "$out/share/icons"
         cp -r dist "$out/share/icons/MacTahoe-cursors"
         cp -r dist-dark "$out/share/icons/MacTahoe-dark-cursors"

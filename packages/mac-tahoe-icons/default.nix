@@ -2,13 +2,13 @@
 
 stdenvNoCC.mkDerivation {
     pname = "mac-tahoe-icons";
-    version = "unstable-2026-08-10";
+    version = "unstable-2026-08-11";
 
     src = fetchFromGitHub {
         owner = "vinceliuice";
         repo = "MacTahoe-icon-theme";
-        rev = "1d8b6b966f156e5db214785a8e9598aed9952428";
-        hash = "sha256-OtOGj33VxW5bT18iieKTDeHwqsoLgUG/Xno3LICZtZc=";
+        rev = "db9a4f8b236d3c559326f041d75d5173de118c45";
+        hash = "sha256-4zYbSR7aKjyFRYEP6UL/76WJrnzoP+T/JMVBXOcN1vI=";
     };
 
     propagatedBuildInputs = [ hicolor-icon-theme ];
