@@ -1,7 +1,7 @@
-{ lib, stdenvNoCC, fetchFromGitHub, hicolor-icon-theme, ... }:
+{ lib, stdenvNoCC, fetchFromGitHub, ... }:
 
 stdenvNoCC.mkDerivation {
-    pname = "mac-tahoe-icons";
+    pname = "mac-tahoe-cursors";
     version = "unstable-2026-08-10";
 
     src = fetchFromGitHub {
@@ -11,14 +11,10 @@ stdenvNoCC.mkDerivation {
         hash = "sha256-OtOGj33VxW5bT18iieKTDeHwqsoLgUG/Xno3LICZtZc=";
     };
 
-    propagatedBuildInputs = [ hicolor-icon-theme ];
-
     dontConfigure = true;
     dontBuild = true;
     # Disable fixup phase otherwise it will process all 30k svg files.
     dontFixup = true;
-
-    dontDropIconThemeCache = true;
 
     patchPhase = ''
         runHook prePatch
@@ -26,7 +22,7 @@ stdenvNoCC.mkDerivation {
         # Do not run gtk-update-icon-cache
         sed -i '/gtk-update-icon-cache/d' install.sh
         # Do not install cursors
-        sed -i 's/install_theme && install_cursor_theme/install_theme/' install.sh
+        sed -i 's/install_theme && install_cursor_theme/install_cursor_theme/' install.sh
 
         runHook postPatch
     '';
@@ -35,18 +31,14 @@ stdenvNoCC.mkDerivation {
         runHook preInstall
 
         install -d "$out/share/icons"
-        bash install.sh -d "$out/share/icons" -t all
+        cp -r dist "$out/share/icons/MacTahoe-cursors"
+        cp -r dist-dark "$out/share/icons/MacTahoe-dark-cursors"
 
         runHook postInstall
     '';
 
-    # Remove broken symlinks that upstream repo has in links/ folder
-    postInstall = ''
-        find "$out/share/icons" -xtype l -delete
-    '';
-
     meta = with lib; {
-        description = "MacOS Tahoe icon theme for linux";
+        description = "MacOS Tahoe like cursor theme for linux desktops.";
         homepage = "https://github.com/aoqia194/mac-tahoe-icons";
         license = licenses.gpl3Only;
         platforms = platforms.linux;

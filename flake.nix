@@ -5,11 +5,15 @@
         nixpkgs.url = "nixpkgs/nixos-unstable";
     };
 
-    outputs = inputs: let 
-        overlay = final: prev: {
-            mac-tahoe-icons = final.callPackage ./packages/mac-tahoe-icons {};
-            # mac-tahoe-cursors = final.callPackage ./packages/mac-tahoe-cursors {};
-        };
+    outputs = inputs: let
+        packageNames = [
+            "mac-tahoe-icons"
+            "mac-tahoe-cursors"
+        ];
+        overlay = final: prev: builtins.listToAttrs (map (name: {
+            inherit name;
+            value = final.callPackage (./packages + "/${name}") {};
+        }) packageNames);
 
         systems = [ "x86_64-linux" "aarch64-linux" ];
         forEachSystem = f: inputs.nixpkgs.lib.genAttrs systems f;
@@ -21,14 +25,16 @@
     in {
         overlays.default = overlay;
 
-        packages = forEachSystem (system: let pkgs = pkgsFor system; in {
-            inherit (pkgs) mac-tahoe-icons;
-            default = pkgs.mac-tahoe-icons;
+        packages = forEachSystem (system: let
+            pkgs = pkgsFor system;
+            localPackages = inputs.nixpkgs.lib.genAttrs packageNames (name: pkgs.${name});
+        in localPackages // {
+            default = pkgs.${builtins.head packageNames};
         });
 
         devShells = forEachSystem (system: let pkgs = pkgsFor system; in {
             default = pkgs.mkShell {
-                packages = [ pkgs.mac-tahoe-icons ];
+                packages = map (name: pkgs.${name}) packageNames;
             };
         });
     };

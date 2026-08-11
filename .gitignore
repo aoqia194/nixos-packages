@@ -3,6 +3,7 @@
 !/packages
 
 !/.gitignore
+!/flake.lock
 !/flake.nix
 !/LICENSE
 !/README.md
